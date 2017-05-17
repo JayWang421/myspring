@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<!-- 项目中进行Annotation扫描配置的启用，但是不写此语句也表示启用 -->
+	<context:annotation-config/>
+	<!-- 配置那些程序包需要被扫描 -->
+	<context:component-scan base-package="cn.mldn.myspring.context"/>
+	<bean id="dept" class="cn.mldn.myspring.context.service.impl.DeptServiceImpl">
+		<property name="title" value="配置文件定义"/>
+	</bean> 
+</beans>

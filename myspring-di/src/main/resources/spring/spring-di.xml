@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<bean id="companyProperties" class="cn.mldn.myspring.di.vo.CompanyProperties">
+		<property name="title" value="mldn" />
+		<property name="msgs">
+			<props>
+				<prop key="mldn">www.mldn.cn</prop>
+				<prop key="mldnjava">www.mldnjava.cn</prop>
+			</props>
+		</property>	
+	</bean> 
+	<bean id="companyMap" class="cn.mldn.myspring.di.vo.CompanyMap">
+		<property name="title" value="mldn" />
+		<property name="depts">
+			<map>
+				<entry key="部门A" value-ref="deptA" />
+				<entry key="部门A" value-ref="deptB" />
+				<entry key="部门C" value-ref="deptC" />
+			</map>
+		</property>
+	</bean>
+
+
+	<bean id="companySet" class="cn.mldn.myspring.di.vo.CompanySet">
+		<property name="title" value="mldn" />
+		<property name="msgs">
+			<set>	<!-- 表示现在要为msgs配置的是数组对象 -->
+				<value>www.mldn.cn</value>
+				<value>www.mldn.cn</value>
+				<value>www.mldn.cn</value>
+				<value>www.mldnjava.cn</value>
+			</set>
+		</property>
+	</bean>
+
+
+	<bean id="companyList" class="cn.mldn.myspring.di.vo.CompanyList">
+		<property name="title" value="mldn" />
+		<property name="msgs">
+			<list>	<!-- 表示现在要为msgs配置的是数组对象 -->
+				<value>www.mldn.cn</value>
+				<value>www.mldn.cn</value>
+				<value>www.mldn.cn</value>
+				<value>www.mldnjava.cn</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="companyArray" class="cn.mldn.myspring.di.vo.CompanyArray">
+		<property name="title" value="mldn" />
+		<property name="msgs">
+			<array>	<!-- 表示现在要为msgs配置的是数组对象 -->
+				<value>www.mldn.cn</value>
+				<value>www.mldnjava.cn</value>
+			</array>
+		</property>
+	</bean>
+
+
+	<!-- 普通属性：p:属性名称。引用关系：p:属性名称-ref -->
+	<bean id="deptA" class="cn.mldn.myspring.di.vo.Dept" p:deptno="10"
+		p:dname="技术部" />
+	<bean id="deptB" class="cn.mldn.myspring.di.vo.Dept" p:deptno="20"
+		p:dname="开发部" />
+	<bean id="deptC" class="cn.mldn.myspring.di.vo.Dept" p:deptno="30"
+		p:dname="销售部" />
+	<!-- 表示在Spring容器启动的时候将根据此处的配置进行对象实例化，而对象的标记就是emp，反射实例化 -->
+	<bean id="emp" class="cn.mldn.myspring.di.vo.Emp">
+		<!-- 现在明确的表示要进行类中属性的操作，通过setter设置内容 -->
+		<property name="empno" value="7369" />
+		<property name="ename">
+			<value>SMITH</value>
+		</property>
+		<!-- ref表示要进行其它类对象的引用控制，相当于把里面的设置的Date取出 -->
+		<property name="hiredate">
+			<bean class="java.util.Date" />
+		</property>
+		<property name="sal" value="800.00" />
+	</bean>
+</beans>

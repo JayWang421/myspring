@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<!-- 定义一个间隔调度器，间隔调度器里面需要设置间隔触发器，一旦配置了此类，Spring容器启动时会自动开启调度 -->
+	<bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<!-- 一个项目可能有多种触发器，所以此处可以将所有的触发器配置到调度程序类 -->
+		<property name="triggers">
+			<array>
+				<ref bean="simpleTrigger"/>
+			</array>
+		</property>
+	</bean>
+	
+	<!-- 定义间隔触发器类，指的是根据指定的间隔执行一次任务操作 -->
+	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<!-- 定义每次间隔触发时要执行的任务详情配置，而所有的任务详情的信息都在JobDetailFactoryBean中定义了 -->
+		<property name="jobDetail" ref="methodTaskFactory"/>
+		<!-- 定义启动的延迟时间 -->
+		<property name="startDelay" value="0"/>
+		<!-- 执行的时间间隔配置，以毫秒为单位 -->
+		<property name="repeatInterval" value="1000"/>
+	</bean>
+	<!-- 现在定义一个新的工厂类，该工厂类可以实现不强制继承处理的QuartZ定时操作 -->
+	<bean id="methodTaskFactory" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 必须明确的告诉Spring，那个类负责进行定时任务的执行 -->
+		<property name="targetObject">
+			<bean class="cn.mldn.myspring.quartz.task.MyTask"/>
+		</property>
+		<!-- 必须告诉Spring，那个方法可以负责执行任务 -->
+		<property name="targetMethod" value="executeSelf"/>
+	</bean>
+	
+</beans>

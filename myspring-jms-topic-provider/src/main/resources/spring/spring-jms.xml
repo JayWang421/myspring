@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<context:component-scan base-package="cn.mldn"/>
+	<!-- 所有的核心的连接信息的配置文件都保存在activemq.properties文件里面 -->
+	<context:property-placeholder location="classpath:config/*.properties"/>
+	<!-- 现在已经明确给出了要连接的地址信息，而这个地址信息在Spring之中需要通过一个ActiveMQ工厂操作 -->
+	<bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<!-- 定义连接工厂要负责连接处理的程序的网络路径 -->
+		<property name="brokerURL" value="${brokerURL}"/>
+	</bean>
+	<!-- 如果要想进行发送，则需要将ActiveMQ的处理交由JMS进行控制 -->
+	<bean id="connectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+		<!-- 配置要进行连接处理的ActiveMQ的连接工厂类 -->
+		<property name="targetConnectionFactory" ref="targetConnectionFactory"/>
+	</bean>
+	<!-- 需要定义一个消息发送的目的地的信息 -->
+	<bean id="destination" class="org.apache.activemq.command.ActiveMQTopic">
+		<constructor-arg index="0" value="${mldn.topic.name}"/>
+	</bean>
+	<!-- 定义JmsTemplate对象类，进行消息发送的操作处理 -->
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory"/>
+	</bean> 
+</beans>
